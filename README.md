@@ -1,9 +1,8 @@
-# Fabric Example Mod
+# kennytvs-epic-force-close-loading-screen-mod-for-fabric-1.18.2
 
-## Setup
+Since 1.18.2, the client only quits the world loading screen once the chunk it is in has been received. This mod force closes that screen.
 
-For setup instructions please see the [fabric wiki page](https://fabricmc.net/wiki/tutorial:setup) that relates to the IDE that you are using.
+Credits to the well thought out name go to [mdcfe](https://github.com/mdcfe).
 
 ## License
-
-This template is available under the CC0 license. Feel free to learn from it and incorporate it in your own projects.
+This project is licensed under the [MIT license](LICENSE).
