@@ -3,14 +3,13 @@
   "id": "forcecloseloadingscreen",
   "version": "${version}",
 
-  "name": "kennytv's epic force close loading screen mod for Fabric 1.18.2",
+  "name": "kennytv's epic force close loading screen mod for Fabric",
   "description": "Force closes the level receiving screen instead of having to wait for the chunks you're in to be sent",
   "authors": [
     "kennytv"
   ],
   "contact": {
-    "homepage": "https://kennytv.eu/",
-    "sources": "https://github.com/kennytv/kennytvs-epic-force-close-loading-screen-mod-for-fabric-1.18.2"
+    "sources": "https://github.com/kennytv/kennytvs-epic-force-close-loading-screen-mod-for-fabric"
   },
 
   "license": "MIT",
@@ -20,6 +19,9 @@
   "entrypoints": {
     "main": [
       "eu.kennytv.forcecloseloadingscreen.ForceCloseLoadingScreenMod"
+    ],
+    "modmenu": [
+      "eu.kennytv.forcecloseloadingscreen.config.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -31,5 +33,9 @@
     "fabric": "*",
     "minecraft": "1.18.2",
     "java": ">=17"
+  },
+  "suggests": {
+    "cloth-config": "*",
+    "modmenu": "*"
   }
 }

@@ -6,7 +6,8 @@
   "mixins": [
   ],
   "client": [
-    "ReceivingLevelScreenMixin"
+    "ReceivingLevelScreenMixin",
+    "MinecraftMixin"
   ],
   "injectors": {
     "defaultRequire": 1
