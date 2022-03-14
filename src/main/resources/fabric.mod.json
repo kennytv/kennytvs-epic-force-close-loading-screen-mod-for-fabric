@@ -15,7 +15,7 @@
   "license": "MIT",
   "icon": "assets/forcecloseloadingscreen/icon.png",
 
-  "environment": "*",
+  "environment": "client",
   "entrypoints": {
     "main": [
       "eu.kennytv.forcecloseloadingscreen.ForceCloseLoadingScreenMod"
