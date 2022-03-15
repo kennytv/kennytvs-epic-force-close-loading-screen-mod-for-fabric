@@ -1,6 +1,7 @@
 # kennytvs-epic-force-close-loading-screen-mod-for-fabric
 
-Since 1.18.2, the client only quits the world loading screen once the chunk it is in has been received. This mod force closes that screen.
+Since 1.18.2, the client only quits the world loading screen once the chunk it is in has been received... *[and at least 2 seconds have passed](https://bugs.mojang.com/browse/MC-249059)*.
+By default, the mod fixes that behavior. Additionally, you can also fully get rid of the screen.
 
 Credits to the well-thought-out name and wonderful icon go to [mdcfe](https://github.com/mdcfe).
 
