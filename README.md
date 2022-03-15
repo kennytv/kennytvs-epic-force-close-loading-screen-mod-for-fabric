@@ -16,7 +16,7 @@ Here are some video comparisons of Vanilla vs. the mod with the instant-close op
 ![World change](https://imgur.com/GYdJVJE.gif)
 
 ## Downloads
-You can download the mod from the [GH downloads page](https://github.com/kennytv/kennytvs-epic-force-close-loading-screen-mod-for-fabric/releases), [CurseForge](https://www.curseforge.com/minecraft/mc-mods/kennytvs-epic-force-close-loading-screen-mod-for), or [Modrinth](https://modrinth.com/mod/forcecloseworldloadingscreen)
+You can download the mod from [Modrinth](https://modrinth.com/mod/forcecloseworldloadingscreen) or the [GH downloads page](https://github.com/kennytv/kennytvs-epic-force-close-loading-screen-mod-for-fabric/releases).
 
 ## License
 This project is licensed under the [MIT license](LICENSE).
