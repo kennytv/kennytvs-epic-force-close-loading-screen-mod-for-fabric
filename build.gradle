@@ -21,9 +21,6 @@ dependencies {
     mappings loom.officialMojangMappings()
 	modImplementation "net.fabricmc:fabric-loader:${project.loader_version}"
 
-	// Fabric API. This is technically optional, but you probably want it anyway.
-	modImplementation "net.fabricmc.fabric-api:fabric-api:${project.fabric_version}"
-
     modApi "com.terraformersmc:modmenu:3.1.0"
     modApi("me.shedaniel.cloth:cloth-config-fabric:6.2.57") {
         exclude(group: "net.fabricmc.fabric-api")
