@@ -1,6 +1,5 @@
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
-import eu.kennytv.forcecloseloadingscreen.ForceCloseLoadingScreenMod;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
@@ -19,7 +18,7 @@ public abstract class MinecraftMixin {
 
     @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
     public void setScreen(final Screen screen, final CallbackInfo ci) {
-        if (ForceCloseLoadingScreenMod.isInstantClose() && screen instanceof ReceivingLevelScreen) {
+        if (screen instanceof ReceivingLevelScreen) {
             ci.cancel();
             setScreen(null);
         }

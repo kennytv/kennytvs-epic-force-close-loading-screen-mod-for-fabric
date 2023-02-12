@@ -19,9 +19,6 @@
   "entrypoints": {
     "main": [
       "eu.kennytv.forcecloseloadingscreen.ForceCloseLoadingScreenMod"
-    ],
-    "modmenu": [
-      "eu.kennytv.forcecloseloadingscreen.config.ModMenuIntegration"
     ]
   },
   "mixins": [
@@ -30,11 +27,9 @@
 
   "depends": {
     "fabricloader": ">=0.13.3",
-    "minecraft": ">=1.18.2",
+    "minecraft": ">=1.19.3",
     "java": ">=17"
   },
   "suggests": {
-    "cloth-config": "*",
-    "modmenu": "*"
   }
 }
