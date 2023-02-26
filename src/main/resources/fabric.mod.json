@@ -17,9 +17,6 @@
 
   "environment": "client",
   "entrypoints": {
-    "main": [
-      "eu.kennytv.forcecloseloadingscreen.ForceCloseLoadingScreenMod"
-    ]
   },
   "mixins": [
     "forcecloseloadingscreen.mixins.json"
