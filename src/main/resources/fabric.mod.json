@@ -4,7 +4,7 @@
   "version": "${version}",
 
   "name": "kennytv's epic force close loading screen mod for Fabric",
-  "description": "Force closes the level receiving screen instead of having to wait for the chunks you're in to be sent",
+  "description": "Force closes the level receiving and resource pack loading screen instead of having to wait for the chunks you're in to be sent",
   "authors": [
     "kennytv"
   ],
