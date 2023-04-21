@@ -1,6 +1,6 @@
 {
   "schemaVersion": 1,
-  "id": "forcecloseloadingscreen",
+  "id": "forcecloseworldloadingscreen",
   "version": "${version}",
 
   "name": "kennytv's epic force close loading screen mod for Fabric",
