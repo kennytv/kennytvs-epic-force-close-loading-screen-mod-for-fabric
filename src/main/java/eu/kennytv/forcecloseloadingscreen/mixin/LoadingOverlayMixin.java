@@ -22,8 +22,8 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
-import com.mojang.blaze3d.vertex.PoseStack;
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -45,7 +45,7 @@ public abstract class LoadingOverlayMixin {
     private long fadeOutStart;
 
     @Inject(at = @At("TAIL"), method = "render")
-    public void setScreen(final PoseStack poseStack, final int i, final int j, final float f, final CallbackInfo ci) {
+    public void setScreen(final GuiGraphics guiGraphics, final int i, final int j, final float f, final CallbackInfo ci) {
         if (this.fadeOutStart != -1) {
             this.minecraft.setOverlay(null);
         }
