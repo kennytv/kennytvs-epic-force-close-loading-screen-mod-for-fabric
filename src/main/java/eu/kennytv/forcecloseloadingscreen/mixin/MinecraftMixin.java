@@ -22,10 +22,13 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
+import eu.kennytv.forcecloseloadingscreen.JoiningWorldBridgeScreen;
+import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
-import net.minecraft.client.multiplayer.ClientLevel;
+import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
+import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
@@ -46,19 +49,23 @@ public abstract class MinecraftMixin {
 
     @Shadow
     @Nullable
-    public ClientLevel level;
+    public abstract ClientPacketListener getConnection();
 
     @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
     public void setScreen(final Screen screen, final CallbackInfo ci) {
         if (screen instanceof ReceivingLevelScreen) {
             ci.cancel();
             this.setScreen(null);
+        } else if (screen instanceof ServerReconfigScreen) {
+            ci.cancel();
+            this.setScreen(new ReconfigBridgeScreen(this.getConnection().getConnection()));
         }
     }
 
     @Redirect(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL))
-    private void updateScreenAndTick(final Minecraft instance, final Screen screen) {
+    private void setLevelUpdateScreenAndTick(final Minecraft minecraft, final Screen screen) {
         // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
-        this.updateScreenAndTick(this.level != null ? null : screen);
+        // Can't just set it to null during reconfiguration, so set an empty screen
+        this.updateScreenAndTick(new JoiningWorldBridgeScreen());
     }
 }
