@@ -3,7 +3,7 @@
   "id": "forcecloseworldloadingscreen",
   "version": "${version}",
 
-  "name": "kennytv's epic force close loading screen mod for Fabric",
+  "name": "Force Close Loading Screen",
   "description": "Force closes the level receiving and resource pack loading screen instead of having to wait for the chunks you're in to be sent",
   "authors": [
     "kennytv"
@@ -28,5 +28,11 @@
     "java": ">=17"
   },
   "suggests": {
+  },
+
+  "custom": {
+    "modmenu": {
+      "update_checker": true
+    }
   }
 }
