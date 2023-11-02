@@ -28,11 +28,5 @@
     "java": ">=17"
   },
   "suggests": {
-  },
-
-  "custom": {
-    "modmenu": {
-      "update_checker": true
-    }
   }
 }
