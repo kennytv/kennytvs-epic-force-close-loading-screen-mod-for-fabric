@@ -34,38 +34,30 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.ModifyArg;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
 
     @Shadow
-    public abstract void setScreen(@Nullable Screen screen);
-
-    @Shadow
-    protected abstract void updateScreenAndTick(Screen screen);
-
-    @Shadow
     @Nullable
     public abstract ClientPacketListener getConnection();
 
-    @Inject(at = @At("HEAD"), method = "setScreen", cancellable = true)
-    public void setScreen(final Screen screen, final CallbackInfo ci) {
+    @ModifyVariable(at = @At("HEAD"), method = "setScreen", ordinal = 0, argsOnly = true)
+    public Screen setScreen(Screen screen) {
         if (screen instanceof ReceivingLevelScreen) {
-            ci.cancel();
-            this.setScreen(null);
+            return null;
         } else if (screen instanceof ServerReconfigScreen) {
-            ci.cancel();
-            this.setScreen(new ReconfigBridgeScreen(this.getConnection().getConnection()));
+            return new ReconfigBridgeScreen(this.getConnection().getConnection());
         }
+        return screen;
     }
 
-    @Redirect(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL))
-    private void setLevelUpdateScreenAndTick(final Minecraft minecraft, final Screen screen) {
+    @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
+    private Screen setLevelUpdateScreenAndTick(Screen screen) {
         // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
         // Can't just set it to null during reconfiguration, so set an empty screen
-        this.updateScreenAndTick(new JoiningWorldBridgeScreen());
+        return new JoiningWorldBridgeScreen();
     }
 }
