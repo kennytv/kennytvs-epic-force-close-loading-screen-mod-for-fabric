@@ -22,12 +22,9 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
-import com.llamalad7.mixinextras.sugar.Local;
-import com.llamalad7.mixinextras.sugar.ref.LocalRef;
 import eu.kennytv.forcecloseloadingscreen.JoiningWorldBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.MouseHandler;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
@@ -38,9 +35,10 @@ import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
-import org.spongepowered.asm.mixin.injection.Redirect;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
@@ -63,29 +61,17 @@ public abstract class MinecraftMixin {
             return null;
         } else if (screen instanceof ServerReconfigScreen) {
             return new ReconfigBridgeScreen(this.getConnection().getConnection());
+        } else if (this.screen instanceof JoiningWorldBridgeScreen && screen instanceof JoiningWorldBridgeScreen) {
+            return null;
         }
         return screen;
     }
 
-    @Redirect(method = "setScreen", at = @At(value = "FIELD", target = "Lnet/minecraft/client/Minecraft;screen:Lnet/minecraft/client/gui/screens/Screen;", opcode = Opcodes.PUTFIELD))
-    public void setScreenCancelCloseScreen(Minecraft instance, Screen screen, @Local(argsOnly = true) LocalRef<Screen> screenRef) {
-        if (this.screen instanceof JoiningWorldBridgeScreen && screen instanceof JoiningWorldBridgeScreen) {
-            screenRef.set(null);
-            screen = null;
-        }
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    public void setScreenCancelCloseScreen(Screen screen, CallbackInfo ci) {
         if (this.level != null && screen instanceof JoiningWorldBridgeScreen) {
-            screenRef.set(null);
-            return;
+            ci.cancel();
         }
-        this.screen = screen;
-    }
-
-    @Redirect(method = "setScreen", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/MouseHandler;grabMouse()V"))
-    public void setScreenCancelGrabMouse(MouseHandler mouseHandler) {
-        if (this.screen != null) {
-            return;
-        }
-        mouseHandler.grabMouse();
     }
 
     @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
