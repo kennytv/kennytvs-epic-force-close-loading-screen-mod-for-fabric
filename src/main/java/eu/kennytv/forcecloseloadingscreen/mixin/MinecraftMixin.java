@@ -28,17 +28,28 @@ import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
+import net.minecraft.client.multiplayer.ClientLevel;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.jetbrains.annotations.Nullable;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
+import org.spongepowered.asm.mixin.injection.Inject;
 import org.spongepowered.asm.mixin.injection.ModifyArg;
 import org.spongepowered.asm.mixin.injection.ModifyVariable;
+import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 
 @Mixin(Minecraft.class)
 public abstract class MinecraftMixin {
+
+    @Shadow
+    @Nullable
+    public ClientLevel level;
+
+    @Shadow
+    @Nullable
+    public Screen screen;
 
     @Shadow
     @Nullable
@@ -50,8 +61,17 @@ public abstract class MinecraftMixin {
             return null;
         } else if (screen instanceof ServerReconfigScreen) {
             return new ReconfigBridgeScreen(this.getConnection().getConnection());
+        } else if (this.screen instanceof JoiningWorldBridgeScreen && screen instanceof JoiningWorldBridgeScreen) {
+            return null;
         }
         return screen;
+    }
+
+    @Inject(method = "setScreen", at = @At("HEAD"), cancellable = true)
+    public void setScreenCancelCloseScreen(Screen screen, CallbackInfo ci) {
+        if (this.level != null && screen instanceof JoiningWorldBridgeScreen) {
+            ci.cancel();
+        }
     }
 
     @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
