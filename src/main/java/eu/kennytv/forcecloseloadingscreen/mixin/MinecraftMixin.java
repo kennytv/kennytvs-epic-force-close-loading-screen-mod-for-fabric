@@ -24,9 +24,11 @@ package eu.kennytv.forcecloseloadingscreen.mixin;
 
 import eu.kennytv.forcecloseloadingscreen.JoiningWorldBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
+import eu.kennytv.forcecloseloadingscreen.TitleBridgeScreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.screens.ReceivingLevelScreen;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import org.jetbrains.annotations.Nullable;
@@ -50,6 +52,8 @@ public abstract class MinecraftMixin {
             return null;
         } else if (screen instanceof ServerReconfigScreen) {
             return new ReconfigBridgeScreen(this.getConnection().getConnection());
+        } else if (screen instanceof TitleScreen) {
+            return new TitleBridgeScreen();
         }
         return screen;
     }
