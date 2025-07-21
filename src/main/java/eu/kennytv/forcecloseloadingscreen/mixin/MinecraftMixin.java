@@ -22,6 +22,7 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
+import eu.kennytv.forcecloseloadingscreen.CapturedFrame;
 import eu.kennytv.forcecloseloadingscreen.JoiningWorldBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.TitleBridgeScreen;
@@ -58,7 +59,7 @@ public abstract class MinecraftMixin {
     public abstract ClientPacketListener getConnection();
 
     @ModifyVariable(at = @At("HEAD"), method = "setScreen", ordinal = 0, argsOnly = true)
-    public Screen setScreen(Screen screen) {
+    public Screen setScreen(final Screen screen) {
         if (screen instanceof ReceivingLevelScreen) {
             return null;
         } else if (screen instanceof ServerReconfigScreen) {
@@ -79,9 +80,20 @@ public abstract class MinecraftMixin {
     }
 
     @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
-    private Screen setLevelUpdateScreenAndTick(Screen screen) {
-        // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
-        // Can't just set it to null during reconfiguration, so set an empty screen
-        return new JoiningWorldBridgeScreen();
+    private Screen setLevelUpdateScreenAndTick(final Screen screen) {
+        if (CapturedFrame.initialJoin) {
+            CapturedFrame.initialJoin = false;
+            return null;
+        } else {
+            // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
+            // Can't just set it to null during reconfiguration, so set an empty screen
+            return new JoiningWorldBridgeScreen();
+        }
+    }
+
+    @Inject(at = @At("HEAD"), method = "disconnect")
+    public void disconnect(final Screen screen, final boolean bl, final CallbackInfo ci) {
+        CapturedFrame.initialJoin = true;
+        CapturedFrame.clearCapturedTexture();
     }
 }

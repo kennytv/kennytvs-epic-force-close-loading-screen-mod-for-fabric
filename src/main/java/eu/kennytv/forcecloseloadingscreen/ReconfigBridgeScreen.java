@@ -2,6 +2,7 @@ package eu.kennytv.forcecloseloadingscreen;
 
 import net.minecraft.client.gui.GuiGraphics;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.Connection;
 import net.minecraft.network.chat.Component;
 
@@ -11,10 +12,14 @@ public final class ReconfigBridgeScreen extends Screen {
     public ReconfigBridgeScreen(final Connection connection) {
         super(Component.literal("weee"));
         this.connection = connection;
+
+        // Capture a frame, clear it after joining
+        CapturedFrame.captureLastFrame();
     }
 
     @Override
     public void render(final GuiGraphics guiGraphics, final int i, final int j, final float f) {
+        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CapturedFrame.CAPTURED_FRAME_ID, 0, 0, 0F, 0F, this.width, this.height, this.width, this.height);
     }
 
     @Override
@@ -30,5 +35,20 @@ public final class ReconfigBridgeScreen extends Screen {
         } else {
             this.connection.handleDisconnection();
         }
+    }
+
+    @Override
+    public boolean isPauseScreen() {
+        return false;
+    }
+
+    @Override
+    public boolean shouldCloseOnEsc() {
+        return false;
+    }
+
+    @Override
+    protected boolean shouldNarrateNavigation() {
+        return false;
     }
 }
