@@ -7,13 +7,16 @@ import net.minecraft.network.chat.Component;
 
 public final class JoiningWorldBridgeScreen extends Screen {
 
-    public JoiningWorldBridgeScreen() {
+    private final boolean renderLastFrame;
+
+    public JoiningWorldBridgeScreen(final boolean renderLastFrame) {
         super(Component.literal("wooo"));
+        this.renderLastFrame = renderLastFrame;
     }
 
     @Override
     public void render(final GuiGraphics guiGraphics, final int i, final int j, final float f) {
-        if (CapturedFrame.capturedTexture() != null) {
+        if (this.renderLastFrame) {
             guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CapturedFrame.CAPTURED_FRAME_ID, 0, 0, 0.0F, 0.0F, this.width, this.height, this.width, this.height);
         }
     }
@@ -35,11 +38,5 @@ public final class JoiningWorldBridgeScreen extends Screen {
     @Override
     protected boolean shouldNarrateNavigation() {
         return false;
-    }
-
-    @Override
-    public void removed() {
-        CapturedFrame.clearCapturedTexture();
-        super.removed();
     }
 }

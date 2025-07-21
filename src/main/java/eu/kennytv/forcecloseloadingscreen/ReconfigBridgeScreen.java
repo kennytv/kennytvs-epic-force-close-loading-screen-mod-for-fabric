@@ -12,9 +12,6 @@ public final class ReconfigBridgeScreen extends Screen {
     public ReconfigBridgeScreen(final Connection connection) {
         super(Component.literal("weee"));
         this.connection = connection;
-
-        // Capture a frame, clear it after joining
-        CapturedFrame.captureLastFrame();
     }
 
     @Override

@@ -9,26 +9,17 @@ public final class CapturedFrame {
 
     public static final ResourceLocation CAPTURED_FRAME_ID = ResourceLocation.fromNamespaceAndPath("forcecloseloadingscreen", "captured_frame");
     public static boolean initialJoin = true;
-    private static DynamicTexture capturedTexture;
-
-    public static DynamicTexture capturedTexture() {
-        return capturedTexture;
-    }
+    public static boolean respawn;
 
     public static void clearCapturedTexture() {
-        if (capturedTexture != null) {
-            capturedTexture.close();
-            Minecraft.getInstance().getTextureManager().release(CAPTURED_FRAME_ID);
-            capturedTexture = null;
-        }
+        Minecraft.getInstance().getTextureManager().release(CAPTURED_FRAME_ID);
     }
 
     public static void captureLastFrame() {
         // I'm fairly sure this isn't the best way to do this, but it's the only way I know how to do
         final Minecraft client = Minecraft.getInstance();
         Screenshot.takeScreenshot(client.getMainRenderTarget(), nativeImage -> {
-            capturedTexture = new DynamicTexture(null, nativeImage);
-            client.getTextureManager().register(CapturedFrame.CAPTURED_FRAME_ID, CapturedFrame.capturedTexture());
+            client.getTextureManager().register(CapturedFrame.CAPTURED_FRAME_ID, new DynamicTexture(null, nativeImage));
         });
     }
 }

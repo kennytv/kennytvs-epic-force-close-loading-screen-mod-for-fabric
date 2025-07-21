@@ -52,6 +52,10 @@ public abstract class MinecraftMixin {
     @ModifyVariable(at = @At("HEAD"), method = "setScreen", ordinal = 0, argsOnly = true)
     public Screen setScreen(final Screen screen) {
         if (screen instanceof ReceivingLevelScreen) {
+            if (CapturedFrame.initialJoin) {
+                CapturedFrame.initialJoin = false;
+                return screen;
+            }
             return null;
         } else if (screen instanceof ServerReconfigScreen) {
             return new ReconfigBridgeScreen(this.getConnection().getConnection());
@@ -64,13 +68,18 @@ public abstract class MinecraftMixin {
     @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
     private Screen setLevelUpdateScreenAndTick(final Screen screen) {
         if (CapturedFrame.initialJoin) {
-            CapturedFrame.initialJoin = false;
             return screen;
         } else {
             // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
             // Can't just set it to null during reconfiguration, so set an empty screen
-            return new JoiningWorldBridgeScreen();
+            return new JoiningWorldBridgeScreen(!CapturedFrame.respawn);
         }
+    }
+
+    @Inject(at = @At("HEAD"), method = "clearClientLevel")
+    public void clearClientLevel(final Screen screen, final CallbackInfo ci) {
+        // Capture frames for reconfiguration
+        CapturedFrame.captureLastFrame();
     }
 
     @Inject(at = @At("HEAD"), method = "disconnect")
