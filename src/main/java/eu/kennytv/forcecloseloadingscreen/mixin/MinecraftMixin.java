@@ -27,7 +27,7 @@ import eu.kennytv.forcecloseloadingscreen.JoiningWorldBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.TitleBridgeScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.ReceivingLevelScreen;
+import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
@@ -51,7 +51,7 @@ public abstract class MinecraftMixin {
 
     @ModifyVariable(at = @At("HEAD"), method = "setScreen", ordinal = 0, argsOnly = true)
     public Screen setScreen(final Screen screen) {
-        if (screen instanceof ReceivingLevelScreen) {
+        if (screen instanceof LevelLoadingScreen) {
             if (CapturedFrame.initialJoin) {
                 CapturedFrame.initialJoin = false;
                 return screen;
@@ -65,16 +65,16 @@ public abstract class MinecraftMixin {
         return screen;
     }
 
-    @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
-    private Screen setLevelUpdateScreenAndTick(final Screen screen) {
-        if (CapturedFrame.initialJoin) {
-            return screen;
-        } else {
-            // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
-            // Can't just set it to null during reconfiguration, so set an empty screen
-            return new JoiningWorldBridgeScreen(!CapturedFrame.respawn);
-        }
-    }
+//    @ModifyArg(method = "setLevel", at = @At(value = "INVOKE", target = "Lnet/minecraft/client/Minecraft;updateScreenAndTick(Lnet/minecraft/client/gui/screens/Screen;)V", opcode = Opcodes.INVOKEVIRTUAL), index = 0)
+//    private Screen setLevelUpdateScreenAndTick(final Screen screen) {
+//        if (CapturedFrame.initialJoin) {
+//            return screen;
+//        } else {
+//            // Make sure we clean up what needs cleaning up, just that we don't set a new screen on server switches within a proxy
+//            // Can't just set it to null during reconfiguration, so set an empty screen
+//            return new JoiningWorldBridgeScreen(!CapturedFrame.respawn);
+//        }
+//    }
 
     @Inject(at = @At("HEAD"), method = "clearClientLevel")
     public void clearClientLevel(final Screen screen, final CallbackInfo ci) {

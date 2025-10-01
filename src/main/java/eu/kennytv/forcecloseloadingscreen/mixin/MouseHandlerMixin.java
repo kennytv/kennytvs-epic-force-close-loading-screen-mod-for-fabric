@@ -22,7 +22,8 @@ public class MouseHandlerMixin {
 
     @Inject(method = "grabMouse", at = @At(value = "HEAD", target = "Lnet/minecraft/client/Minecraft;setScreen(Lnet/minecraft/client/gui/screens/Screen;)V"))
     public void fixSprint(CallbackInfo ci) {
-        if (this.minecraft.isWindowActive() && this.mouseGrabbed && !Minecraft.ON_OSX) {
+        // yarn SystemKeycodes.IS_MAC_OS -> mojang InputQuirks.REPLACE_CTRL_KEY_WITH_CMD_KEY
+        if (this.minecraft.isWindowActive() && this.mouseGrabbed && !net.minecraft.client.input.InputQuirks.REPLACE_CTRL_KEY_WITH_CMD_KEY) {
             KeyMapping.setAll();
         }
     }
