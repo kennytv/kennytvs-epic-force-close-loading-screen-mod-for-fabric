@@ -9,7 +9,6 @@ public final class CapturedFrame {
 
     public static final ResourceLocation CAPTURED_FRAME_ID = ResourceLocation.fromNamespaceAndPath("forcecloseloadingscreen", "captured_frame");
     public static boolean initialJoin = true;
-    public static boolean respawn;
 
     public static void clearCapturedTexture() {
         Minecraft.getInstance().getTextureManager().release(CAPTURED_FRAME_ID);

@@ -9,7 +9,8 @@
     "LoadingOverlayMixin",
     "MinecraftMixin",
     "MouseHandlerMixin",
-    "ClientPacketListenerMixin"
+    "ClientPacketListenerMixin",
+    "LevelLoadingScreenMixin"
   ],
   "injectors": {
     "defaultRequire": 1

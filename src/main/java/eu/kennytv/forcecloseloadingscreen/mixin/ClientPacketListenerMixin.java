@@ -6,7 +6,6 @@ import net.minecraft.client.multiplayer.ClientCommonPacketListenerImpl;
 import net.minecraft.client.multiplayer.ClientPacketListener;
 import net.minecraft.client.multiplayer.CommonListenerCookie;
 import net.minecraft.network.Connection;
-import net.minecraft.network.protocol.game.ClientboundRespawnPacket;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
@@ -25,15 +24,5 @@ public abstract class ClientPacketListenerMixin extends ClientCommonPacketListen
             // Capture last frames for repeated login packets that skip reconfiguration
             CapturedFrame.captureLastFrame();
         }
-    }
-
-    @Inject(at = @At("HEAD"), method = "handleRespawn")
-    public void respawnHead(final ClientboundRespawnPacket packet, final CallbackInfo ci) {
-        CapturedFrame.respawn = true;
-    }
-
-    @Inject(at = @At("TAIL"), method = "handleRespawn")
-    public void respawnTail(final ClientboundRespawnPacket packet, final CallbackInfo ci) {
-        CapturedFrame.respawn = false;
     }
 }

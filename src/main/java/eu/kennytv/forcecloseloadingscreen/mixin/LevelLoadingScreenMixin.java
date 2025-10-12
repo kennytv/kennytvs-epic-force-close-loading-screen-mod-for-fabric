@@ -22,43 +22,28 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
-import net.minecraft.client.Minecraft;
+import eu.kennytv.forcecloseloadingscreen.CapturedFrame;
 import net.minecraft.client.gui.GuiGraphics;
-import net.minecraft.client.gui.screens.LoadingOverlay;
-import org.objectweb.asm.Opcodes;
-import org.spongepowered.asm.mixin.Final;
+import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import org.spongepowered.asm.mixin.Mixin;
-import org.spongepowered.asm.mixin.Shadow;
 import org.spongepowered.asm.mixin.injection.At;
 import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.Redirect;
 import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfoReturnable;
 
-@Mixin(LoadingOverlay.class)
-public abstract class LoadingOverlayMixin {
+@Mixin(LevelLoadingScreen.class)
+public abstract class LevelLoadingScreenMixin {
 
-    @Shadow
-    @Final
-    private Minecraft minecraft;
-
-    @Shadow
-    private long fadeOutStart;
-
-    @Inject(at = @At("TAIL"), method = "render")
-    public void render(final GuiGraphics guiGraphics, final int i, final int j, final float f, final CallbackInfo ci) {
-        if (this.fadeOutStart != -1) {
-            this.minecraft.setOverlay(null);
+    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
+    public void render(GuiGraphics guiGraphics, int i, int j, float f, final CallbackInfo ci) {
+        if (!CapturedFrame.initialJoin) {
+            ci.cancel();
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;fadeIn:Z", opcode = Opcodes.GETFIELD))
-    private boolean fadeIn(final LoadingOverlay instance) {
-        return false;
-    }
-
-    @Inject(at = @At("RETURN"), method = "isReadyToFadeOut", cancellable = true)
-    public void isReadyToFadeOut(final CallbackInfoReturnable<Boolean> cir) {
-        cir.setReturnValue(true);
+    @Inject(at = @At("HEAD"), method = "renderBackground", cancellable = true)
+    public void renderBackground(final CallbackInfo ci) {
+        if (!CapturedFrame.initialJoin) {
+            ci.cancel();
+        }
     }
 }
