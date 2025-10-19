@@ -46,4 +46,9 @@ public abstract class LevelLoadingScreenMixin {
             ci.cancel();
         }
     }
+
+    @Inject(at = @At("HEAD"), method = "onClose")
+    public void onClose(final CallbackInfo ci) {
+        CapturedFrame.initialJoin = false;
+    }
 }
