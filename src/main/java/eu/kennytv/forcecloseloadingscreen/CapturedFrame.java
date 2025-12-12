@@ -3,11 +3,11 @@ package eu.kennytv.forcecloseloadingscreen;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.Screenshot;
 import net.minecraft.client.renderer.texture.DynamicTexture;
-import net.minecraft.resources.ResourceLocation;
+import net.minecraft.resources.Identifier;
 
 public final class CapturedFrame {
 
-    public static final ResourceLocation CAPTURED_FRAME_ID = ResourceLocation.fromNamespaceAndPath("forcecloseloadingscreen", "captured_frame");
+    public static final Identifier CAPTURED_FRAME_ID = Identifier.fromNamespaceAndPath("forcecloseloadingscreen", "captured_frame");
     public static boolean initialJoin = true;
 
     public static void clearCapturedTexture() {

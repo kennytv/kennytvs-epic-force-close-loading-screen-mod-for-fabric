@@ -26,7 +26,6 @@ import eu.kennytv.forcecloseloadingscreen.CapturedFrame;
 import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
 import eu.kennytv.forcecloseloadingscreen.TitleBridgeScreen;
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.gui.screens.TitleScreen;
 import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
@@ -62,8 +61,8 @@ public abstract class MinecraftMixin {
         CapturedFrame.captureLastFrame();
     }
 
-    @Inject(at = @At("HEAD"), method = "disconnect")
-    public void disconnect(final Screen screen, final boolean bl, final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V")
+    public void disconnect(final Screen screen, final boolean bl, final boolean bl2, final CallbackInfo ci) {
         CapturedFrame.initialJoin = true;
         CapturedFrame.clearCapturedTexture();
     }
