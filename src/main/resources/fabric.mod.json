@@ -21,6 +21,7 @@
   "mixins": [
     "forcecloseloadingscreen.mixins.json"
   ],
+  "accessWidener": "forcecloseloadingscreen.classtweaker",
 
   "depends": {
     "fabricloader": ">=0.15.10",

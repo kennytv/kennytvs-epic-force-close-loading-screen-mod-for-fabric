@@ -1,5 +1,5 @@
 plugins {
-	id 'fabric-loom' version '1.11-SNAPSHOT'
+	id 'fabric-loom' version '1.13-SNAPSHOT'
 	id 'maven-publish'
 }
 
@@ -30,6 +30,10 @@ processResources {
 tasks.withType(JavaCompile).configureEach {
 	it.options.release = 21
     it.options.encoding = "UTF-8"
+}
+
+loom {
+	accessWidenerPath = file("src/main/resources/forcecloseloadingscreen.classtweaker")
 }
 
 java {

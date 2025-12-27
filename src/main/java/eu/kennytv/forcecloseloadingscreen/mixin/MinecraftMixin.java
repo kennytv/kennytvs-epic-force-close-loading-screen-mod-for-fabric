@@ -47,8 +47,8 @@ public abstract class MinecraftMixin {
 
     @ModifyVariable(at = @At("HEAD"), method = "setScreen", ordinal = 0, argsOnly = true)
     public Screen setScreen(final Screen screen) {
-        if (screen instanceof ServerReconfigScreen) {
-            return new ReconfigBridgeScreen(this.getConnection().getConnection());
+        if (screen instanceof ServerReconfigScreen reconfigScreen) {
+            return new ReconfigBridgeScreen(reconfigScreen.connection);
         } else if (screen instanceof TitleScreen) {
             return new TitleBridgeScreen();
         }
