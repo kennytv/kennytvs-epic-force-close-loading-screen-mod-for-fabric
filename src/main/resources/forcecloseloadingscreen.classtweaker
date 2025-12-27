@@ -1,0 +1,3 @@
+classTweaker v1 named
+# TODO: Change namespace named to offical once on MC 26.1
+accessible field net/minecraft/client/gui/screens/multiplayer/ServerReconfigScreen connection Lnet/minecraft/network/Connection;
