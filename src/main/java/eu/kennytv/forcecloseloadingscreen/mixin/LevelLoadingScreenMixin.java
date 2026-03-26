@@ -23,7 +23,7 @@
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
 import eu.kennytv.forcecloseloadingscreen.CapturedFrame;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.LevelLoadingScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
@@ -33,15 +33,15 @@ import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
 @Mixin(LevelLoadingScreen.class)
 public abstract class LevelLoadingScreenMixin {
 
-    @Inject(at = @At("HEAD"), method = "render", cancellable = true)
-    public void render(GuiGraphics guiGraphics, int i, int j, float f, final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "extractRenderState", cancellable = true)
+    public void extractRenderState(GuiGraphicsExtractor graphics, int mouseX, int mouseY, float a, final CallbackInfo ci) {
         if (!CapturedFrame.initialJoin) {
             ci.cancel();
         }
     }
 
-    @Inject(at = @At("HEAD"), method = "renderBackground", cancellable = true)
-    public void renderBackground(final CallbackInfo ci) {
+    @Inject(at = @At("HEAD"), method = "extractBackground", cancellable = true)
+    public void extractBackground(final CallbackInfo ci) {
         if (!CapturedFrame.initialJoin) {
             ci.cancel();
         }
