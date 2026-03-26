@@ -1,6 +1,6 @@
 package eu.kennytv.forcecloseloadingscreen;
 
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
 import net.minecraft.client.renderer.RenderPipelines;
 import net.minecraft.network.Connection;
@@ -15,12 +15,12 @@ public final class ReconfigBridgeScreen extends Screen {
     }
 
     @Override
-    public void render(final GuiGraphics guiGraphics, final int i, final int j, final float f) {
-        guiGraphics.blit(RenderPipelines.GUI_TEXTURED, CapturedFrame.CAPTURED_FRAME_ID, 0, 0, 0F, 0F, this.width, this.height, this.width, this.height);
+    public void extractRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
+        graphics.blit(RenderPipelines.GUI_TEXTURED, CapturedFrame.CAPTURED_FRAME_ID, 0, 0, 0F, 0F, this.width, this.height, this.width, this.height);
     }
 
     @Override
-    public void renderBackground(final GuiGraphics guiGraphics, final int i, final int j, final float f) {
+    public void extractBackground(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a) {
     }
 
     @Override

@@ -23,7 +23,7 @@
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
 import net.minecraft.client.Minecraft;
-import net.minecraft.client.gui.GuiGraphics;
+import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.LoadingOverlay;
 import org.objectweb.asm.Opcodes;
 import org.spongepowered.asm.mixin.Final;
@@ -45,14 +45,14 @@ public abstract class LoadingOverlayMixin {
     @Shadow
     private long fadeOutStart;
 
-    @Inject(at = @At("TAIL"), method = "render")
-    public void render(final GuiGraphics guiGraphics, final int i, final int j, final float f, final CallbackInfo ci) {
+    @Inject(at = @At("TAIL"), method = "extractRenderState")
+    public void extractRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a, final CallbackInfo ci) {
         if (this.fadeOutStart != -1) {
             this.minecraft.setOverlay(null);
         }
     }
 
-    @Redirect(method = "render", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;fadeIn:Z", opcode = Opcodes.GETFIELD))
+    @Redirect(method = "extractRenderState", at = @At(value = "FIELD", target = "Lnet/minecraft/client/gui/screens/LoadingOverlay;fadeIn:Z", opcode = Opcodes.GETFIELD))
     private boolean fadeIn(final LoadingOverlay instance) {
         return false;
     }
