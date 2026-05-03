@@ -1,0 +1,43 @@
+name: Issue Triage
+
+on:
+  issues:
+    types: [opened, labeled]
+
+jobs:
+  analyze:
+    if: |
+      github.event.action == 'opened' ||
+      (github.event.action == 'labeled' && github.event.label.name == 'auto-triage')
+    runs-on: ubuntu-latest
+    timeout-minutes: 15
+    permissions:
+      contents: read
+      issues: read
+      pull-requests: read
+    outputs:
+      decision: ${{ steps.triage.outputs.decision }}
+    steps:
+      - uses: actions/checkout@v6
+      - id: triage
+        uses: jpenilla/KennyBot/.github/actions/triage@master
+        with:
+          issue-number: ${{ github.event.issue.number }}
+          model: opencode-go/deepseek-v4-flash
+        env:
+          OPENCODE_API_KEY: ${{ secrets.OPENCODE_API_KEY }}
+
+  process:
+    needs: analyze
+    if: ${{ needs.analyze.outputs.decision != '' }}
+    runs-on: ubuntu-latest
+    timeout-minutes: 5
+    permissions:
+      issues: write
+    steps:
+      - uses: actions/checkout@v6
+      - uses: jpenilla/KennyBot/.github/actions/process@master
+        with:
+          decision: ${{ needs.analyze.outputs.decision }}
+          issue-number: ${{ github.event.issue.number }}
+          trigger-label: auto-triage
