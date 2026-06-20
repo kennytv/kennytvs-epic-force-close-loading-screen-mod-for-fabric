@@ -22,26 +22,26 @@
  */
 package eu.kennytv.forcecloseloadingscreen.mixin;
 
-import eu.kennytv.forcecloseloadingscreen.CapturedFrame;
-import net.minecraft.client.Minecraft;
+import eu.kennytv.forcecloseloadingscreen.ReconfigBridgeScreen;
+import eu.kennytv.forcecloseloadingscreen.TitleBridgeScreen;
+import net.minecraft.client.gui.Gui;
 import net.minecraft.client.gui.screens.Screen;
+import net.minecraft.client.gui.screens.TitleScreen;
+import net.minecraft.client.gui.screens.multiplayer.ServerReconfigScreen;
 import org.spongepowered.asm.mixin.Mixin;
 import org.spongepowered.asm.mixin.injection.At;
-import org.spongepowered.asm.mixin.injection.Inject;
-import org.spongepowered.asm.mixin.injection.callback.CallbackInfo;
+import org.spongepowered.asm.mixin.injection.ModifyVariable;
 
-@Mixin(Minecraft.class)
-public abstract class MinecraftMixin {
+@Mixin(Gui.class)
+public abstract class GuiMixin {
 
-    @Inject(at = @At("HEAD"), method = "clearClientLevel")
-    public void clearClientLevel(final Screen screen, final CallbackInfo ci) {
-        // Capture frames for reconfiguration
-        CapturedFrame.captureLastFrame();
-    }
-
-    @Inject(at = @At("HEAD"), method = "disconnect(Lnet/minecraft/client/gui/screens/Screen;ZZ)V")
-    public void disconnect(final Screen screen, final boolean bl, final boolean bl2, final CallbackInfo ci) {
-        CapturedFrame.initialJoin = true;
-        CapturedFrame.clearCapturedTexture();
+    @ModifyVariable(at = @At("HEAD"), method = "setScreen", argsOnly = true, name = "screen")
+    public Screen setScreen(final Screen screen) {
+        if (screen instanceof ServerReconfigScreen reconfigScreen) {
+            return new ReconfigBridgeScreen(reconfigScreen.connection);
+        } else if (screen instanceof TitleScreen) {
+            return new TitleBridgeScreen();
+        }
+        return screen;
     }
 }

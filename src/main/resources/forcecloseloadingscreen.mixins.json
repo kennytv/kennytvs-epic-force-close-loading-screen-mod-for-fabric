@@ -10,7 +10,8 @@
     "MinecraftMixin",
     "MouseHandlerMixin",
     "ClientPacketListenerMixin",
-    "LevelLoadingScreenMixin"
+    "LevelLoadingScreenMixin",
+    "GuiMixin"
   ],
   "injectors": {
     "defaultRequire": 1

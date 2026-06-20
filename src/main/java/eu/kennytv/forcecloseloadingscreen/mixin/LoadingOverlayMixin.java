@@ -48,7 +48,7 @@ public abstract class LoadingOverlayMixin {
     @Inject(at = @At("TAIL"), method = "extractRenderState")
     public void extractRenderState(final GuiGraphicsExtractor graphics, final int mouseX, final int mouseY, final float a, final CallbackInfo ci) {
         if (this.fadeOutStart != -1) {
-            this.minecraft.setOverlay(null);
+            this.minecraft.gui.setOverlay(null);
         }
     }
 
