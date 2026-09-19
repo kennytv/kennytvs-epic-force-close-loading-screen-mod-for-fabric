@@ -24,8 +24,8 @@
   "accessWidener": "forcecloseloadingscreen.classtweaker",
 
   "depends": {
-    "fabricloader": ">=0.18.5",
-    "minecraft": ">=26.2",
+    "fabricloader": ">=0.19.5",
+    "minecraft": ">=26.3",
     "java": ">=25"
   },
   "suggests": {

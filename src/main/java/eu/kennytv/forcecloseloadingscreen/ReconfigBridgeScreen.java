@@ -1,11 +1,12 @@
 package eu.kennytv.forcecloseloadingscreen;
 
-import com.mojang.blaze3d.GpuFormat;
-import com.mojang.blaze3d.PrimitiveTopology;
-import com.mojang.blaze3d.pipeline.ColorTargetState;
-import com.mojang.blaze3d.pipeline.RenderPipeline;
 import com.mojang.blaze3d.vertex.DefaultVertexFormat;
 import java.util.Optional;
+
+import com.mojang.renderpearl.api.GpuFormat;
+import com.mojang.renderpearl.api.pipeline.ColorTargetState;
+import com.mojang.renderpearl.api.pipeline.PrimitiveTopology;
+import com.mojang.renderpearl.api.pipeline.RenderPipeline;
 import net.minecraft.client.Minecraft;
 import net.minecraft.client.gui.GuiGraphicsExtractor;
 import net.minecraft.client.gui.screens.Screen;
@@ -17,7 +18,8 @@ public final class ReconfigBridgeScreen extends Screen {
     // Copied from RenderPipelines.GUI_TEXTURED, except it's not translucent to not break leaves (surely there's a better way?)
     private static final RenderPipeline CAPTURED_FRAME_PIPELINE = RenderPipeline.builder()
             .withBindGroupLayout(BindGroupLayouts.GLOBALS)
-            .withBindGroupLayout(BindGroupLayouts.MATRICES_PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.PROJECTION)
+            .withBindGroupLayout(BindGroupLayouts.DYNAMIC_TRANSFORMS)
             .withVertexShader("core/position_tex_color")
             .withFragmentShader("core/position_tex_color")
             .withBindGroupLayout(BindGroupLayouts.SAMPLER0)
